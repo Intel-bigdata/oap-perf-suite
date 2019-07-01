@@ -203,7 +203,36 @@ trait ParquetVsOapVsOrcConfigSet extends BenchmarkConfigSelector{
       .setBenchmarkConfName("parquet w/o index oap cache enabled")
       .setBenchmarkConf(BenchmarkConfig.FILE_FORMAT, "parquet")
       .setBenchmarkConf(BenchmarkConfig.INDEX_ENABLE, "false")
+      .setSparkConf("spark.sql.oap.parquet.data.cache.enable", "true"),
+    new BenchmarkConfig()
+      .setBenchmarkConfName("parquet w/o index oap cache enabled with LZ4 cache compress")
+      .setBenchmarkConf(BenchmarkConfig.FILE_FORMAT, "parquet")
+      .setBenchmarkConf(BenchmarkConfig.INDEX_ENABLE, "false")
       .setSparkConf("spark.sql.oap.parquet.data.cache.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compress.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compression.codec", "LZ4"),
+    new BenchmarkConfig()
+      .setBenchmarkConfName("parquet w/o index oap cache enabled with LZF cache compress")
+      .setBenchmarkConf(BenchmarkConfig.FILE_FORMAT, "parquet")
+      .setBenchmarkConf(BenchmarkConfig.INDEX_ENABLE, "false")
+      .setSparkConf("spark.sql.oap.parquet.data.cache.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compress.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compression.codec", "LZF"),
+    new BenchmarkConfig()
+      .setBenchmarkConfName("parquet w/o index oap cache enabled with SNAPPY cache compress")
+      .setBenchmarkConf(BenchmarkConfig.FILE_FORMAT, "parquet")
+      .setBenchmarkConf(BenchmarkConfig.INDEX_ENABLE, "false")
+      .setSparkConf("spark.sql.oap.parquet.data.cache.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compress.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compression.codec", "SNAPPY"),
+    new BenchmarkConfig()
+      .setBenchmarkConfName("parquet w/o index oap cache enabled with ZSTD cache compress")
+      .setBenchmarkConf(BenchmarkConfig.FILE_FORMAT, "parquet")
+      .setBenchmarkConf(BenchmarkConfig.INDEX_ENABLE, "false")
+      .setSparkConf("spark.sql.oap.parquet.data.cache.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compress.enable", "true")
+      .setSparkConf("spark.sql.oap.data.fiber.cache.compression.codec", "ZSTD")
+
   )
 }
 
