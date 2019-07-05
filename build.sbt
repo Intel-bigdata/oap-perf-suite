@@ -17,9 +17,9 @@ assemblyMergeStrategy in assembly := {
     oldStrategy(x)
 }
 
-unmanagedJars in Compile += file("/home/oap/oap/oap-0.4.0-SNAPSHOT.jar")
+unmanagedJars in Compile += file("/home/oap/oap_jars/oap.jar")
 unmanagedJars in Compile += file("lib/spark-sql-perf_2.11-0.4.11-SNAPSHOT.jar")
 
 // With Oap for Spark 2.3, it needs to change below spark version from 2.1.0 to 2.3.0.
-libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.1.0" % "provided"
+libraryDependencies += "org.apache.spark" %% "spark-sql" % "2.3.0" % "provided"
 libraryDependencies += "org.reflections" % "reflections" % "0.9.10" % "compile"

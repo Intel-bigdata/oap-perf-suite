@@ -17,14 +17,14 @@
 package org.apache.spark.sql.suites
 
 import org.apache.spark.sql.{BenchmarkConfig, OapBenchmarkDataBuilder, OapStrategyConfigSet, OapTestSuite}
-import org.apache.spark.sql.execution.datasources.oap.OapStrategies
+import org.apache.spark.sql.execution.datasources.oap._
 import org.apache.spark.sql.internal.oap.OapConf
 
-object OapStrategySuite extends OapTestSuite with OapStrategyConfigSet with OapStrategies {
+object OapStrategySuite extends OapTestSuite with OapStrategyConfigSet  {
 
   override def beforeAll(conf: Map[String, String] = Map.empty): Unit = {
     super.beforeAll(conf)
-    spark.experimental.extraStrategies = oapStrategies
+    spark.experimental.extraStrategies = spark.sessionState.planner.extraPlanningStrategies
   }
 
   override def afterAll(): Unit = {
