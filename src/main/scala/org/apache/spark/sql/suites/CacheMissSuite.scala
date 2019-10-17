@@ -20,6 +20,9 @@ import org.apache.spark.sql.{BenchmarkConfig, CacheMissConfigSet, OapBenchmarkDa
 
 object CacheMissSuite extends OapTestSuite with CacheMissConfigSet {
 
+
+  override protected def getAppName: String = "CacheMissBenchmarkSuite"
+
   val table = "store_sales"
 
   val attr = "ss_customer_sk"

@@ -22,6 +22,9 @@ import org.apache.spark.sql.internal.oap.OapConf
 
 object OapStrategySuite extends OapTestSuite with OapStrategyConfigSet  {
 
+  override protected def getAppName: String = "OapStrategyBenchmarkSuite"
+
+
   override def beforeAll(conf: Map[String, String] = Map.empty): Unit = {
     super.beforeAll(conf)
     spark.experimental.extraStrategies = spark.sessionState.planner.extraPlanningStrategies

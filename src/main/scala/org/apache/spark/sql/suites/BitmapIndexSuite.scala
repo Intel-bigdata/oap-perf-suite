@@ -20,7 +20,7 @@ import org.apache.spark.sql.{BenchmarkConfig, OapBenchmarkDataBuilder, OapTestSu
 import org.apache.spark.sql.internal.oap.OapConf
 
 object BitmapIndexSuite extends OapTestSuite with ParquetVsOapVsOrcConfigSet {
-  override protected def getAppName: String = "BtreeIndexBenchmarkSuite"
+  override protected def getAppName: String = "BitmapBenchmarkSuite"
 
   private val table = "store_sales"
 
