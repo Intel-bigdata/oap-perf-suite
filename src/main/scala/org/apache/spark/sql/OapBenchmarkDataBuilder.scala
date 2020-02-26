@@ -34,7 +34,7 @@ object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
   private val defaultProperties = Map(
     "oap.benchmark.compression.codec"     -> "snappy",
     "oap.benchmark.support.oap.version"   -> "0.7.0",
-    "oap.benchmark.tpcds.tool.dir"        -> "/home/wh/OAP-TPCDS-TOOL/tools/tpcds-kits/tools",
+    "oap.benchmark.tpcds.tool.dir"        -> "/home/oap/tpcds-kit/tools",
     "oap.benchmark.hdfs.file.root.dir"    -> "/user/oap/oaptest/",
     "oap.benchmark.database.prefix"       -> "",
     "oap.benchmark.database.postfix"      -> "",
