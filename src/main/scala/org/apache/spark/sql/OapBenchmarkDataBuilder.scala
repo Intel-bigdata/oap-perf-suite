@@ -40,7 +40,7 @@ object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
     "oap.benchmark.database.postfix"      -> "",
     "oap.benchmark.tpcds.data.scale"      -> "200",
     "oap.benchmark.tpcds.data.partition"  -> "80",
-    "oap.benchmark.tpcds.data.format"     -> "parquet"
+    "oap.benchmark.tpcds.data.format"     -> "parquet,orc,oap"
   )
 
   def getDatabase(format: String) : String = {
