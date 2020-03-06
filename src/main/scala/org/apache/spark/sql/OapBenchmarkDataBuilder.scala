@@ -16,6 +16,10 @@
  */
 package org.apache.spark.sql
 
+import java.io.FileNotFoundException
+
+import scala.collection.mutable
+
 import com.databricks.spark.sql.perf.tpcds.Tables
 import org.apache.hadoop.conf.Configuration
 import org.apache.hadoop.fs.{FileSystem, FileUtil, Path}
@@ -23,19 +27,20 @@ import org.apache.spark.internal.Logging
 import org.apache.spark.sql.functions._
 import org.apache.spark.util.Utils
 
-import scala.collection.mutable
+
 
 object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
 
   private val defaultProperties = Map(
-    "oap.benchmark.compression.codec"     -> "gzip",
-    "oap.benchmark.support.oap.version"   -> "0.4.0",
+    "oap.benchmark.compression.codec"     -> "snappy",
+    "oap.benchmark.support.oap.version"   -> "0.7.0",
     "oap.benchmark.tpcds.tool.dir"        -> "/home/oap/tpcds-kit/tools",
     "oap.benchmark.hdfs.file.root.dir"    -> "/user/oap/oaptest/",
     "oap.benchmark.database.prefix"       -> "",
     "oap.benchmark.database.postfix"      -> "",
     "oap.benchmark.tpcds.data.scale"      -> "200",
-    "oap.benchmark.tpcds.data.partition"  -> "80"
+    "oap.benchmark.tpcds.data.partition"  -> "80",
+    "oap.benchmark.tpcds.data.format"     -> "parquet,orc,oap"
   )
 
   def getDatabase(format: String) : String = {
@@ -66,19 +71,21 @@ object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
         defaultProperties
       }
     }
+
   }
 
   override def beforeAll(conf: Map[String, String] = Map.empty): Unit = {
     super.beforeAll(conf)
   }
 
-  def generateTables(dataFormats: Array[String] = Array("oap", "parquet", "orc")): Unit = {
+  def generateTables(): Unit = {
     val versionNum = properties.get("oap.benchmark.support.oap.version").get
     val codec = properties.get("oap.benchmark.compression.codec").get
     val scale = properties.get("oap.benchmark.tpcds.data.scale").get.toInt
     val partitions = properties.get("oap.benchmark.tpcds.data.partition").get.toInt
     val hdfsRootDir = properties.get("oap.benchmark.hdfs.file.root.dir").get
     val tpcdsToolPath = properties.get("oap.benchmark.tpcds.tool.dir").get
+    val dataFormats = properties.get("oap.benchmark.tpcds.data.format").get.split(",", 0)
 
     dataFormats.foreach{ format =>
       sqlContext.setConf(s"spark.sql.$format.compression.codec", codec)
@@ -91,7 +98,7 @@ object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
 
   def generateDatabases() {
     // TODO: get from OapFileFormatConfigSet
-    val dataFormats: Seq[String] = Seq("oap", "parquet", "orc")
+    val dataFormats = properties.get("oap.benchmark.tpcds.data.format").get.split(",", 0)
     dataFormats.foreach { format =>
       spark.sql(s"create database if not exists ${getDatabase(format)}")
     }
@@ -128,7 +135,8 @@ object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
         hadoopFs, new Path(dataLocation + "store_sales_dup"), true, conf)
 
       sqlContext.createExternalTable("store_sales", dataLocation + "store_sales", dataFormat)
-      sqlContext.createExternalTable("store_sales_dup", dataLocation + "store_sales_dup", dataFormat)
+      sqlContext.createExternalTable("store_sales_dup", dataLocation + "store_sales_dup"
+        , dataFormat)
       logWarning(s"File size of original table store_sales in $dataFormats format: " +
         TestUtil.calculateFileSize("store_sales", dataLocation, dataFormat)
       )
@@ -177,7 +185,7 @@ object OapBenchmarkDataBuilder extends OapPerfSuiteContext with Logging {
 
     val versionNum = properties.get("oap.benchmark.support.oap.version").get
     val hdfsRootDir = properties.get("oap.benchmark.hdfs.file.root.dir").get
-    val dataFormats: Seq[String] = Seq("oap", "parquet", "orc")
+    val dataFormats = properties.get("oap.benchmark.tpcds.data.format").get.split(",", 0)
 
     dataFormats.foreach { dataFormat => {
         spark.sql(s"use ${getDatabase(dataFormat)}")
